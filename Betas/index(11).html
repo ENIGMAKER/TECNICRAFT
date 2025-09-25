@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TECNICRAFT</title>
+<link href="Web.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Ultra-optimized CSS with aggressive consolidation and performance improvements */
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--primary:#038184;--secondary:#21717a;--accent:#4fa8ae;--black:#000;--glass:rgba(0,0,0,.95);--card-bg:rgba(3,129,132,.1);--border:1px solid var(--primary);--shadow:0 20px 40px rgba(3,129,132,.2);--transition:all .3s ease;--gradient:linear-gradient(90deg,var(--primary),var(--accent))}
+        
+        body{font:300 1rem/1.6 Inter,sans-serif;background:linear-gradient(135deg,var(--black) 0%,var(--secondary) 100%);color:var(--accent);min-height:100vh;overflow-x:hidden;overflow-y:auto}
+        
+        /* Consolidated header and navigation with shared animations */
+        .header{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--glass);backdrop-filter:blur(10px);border-bottom:var(--border);transform:translateY(-100%);transition:transform .6s cubic-bezier(.4,0,.2,1)}
+        .header.visible{transform:translateY(0)}
+        .header-content{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;max-width:1200px;margin:0 auto}
+        .header-logo{height:40px;cursor:pointer;transition:var(--transition)}
+        .header-logo:hover{transform:scale(1.05);filter:brightness(1.2)}
+        .nav{display:flex;gap:2rem}
+        
+        /* Unified button and navigation styles with shared hover effects */
+        .nav-item,.home-nav-btn,.subsection-btn,.character-btn{position:relative;overflow:hidden;transition:var(--transition);cursor:pointer;font-family:Inter,sans-serif;font-weight:500;border:none}
+        .nav-item::before,.home-nav-btn::before,.subsection-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--primary),transparent);transition:left .5s ease}
+        .nav-item:hover::before,.home-nav-btn:hover::before,.subsection-btn:hover::before{left:100%}
+        
+        .nav-item{color:var(--accent);text-decoration:none;padding:.5rem 1rem;border-radius:8px}
+        .nav-item:hover,.nav-item.active{background:var(--primary);color:var(--black)}
+        
+        /* Optimized main section with consolidated animations */
+        .main{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 2rem;position:relative}
+        .main-logo{max-width:600px;width:100%;height:auto;filter:drop-shadow(0 10px 30px rgba(3,129,132,.3));animation:float 6s ease-in-out infinite;cursor:pointer;transition:var(--transition)}
+        .main-logo:hover{transform:scale(1.05);filter:drop-shadow(0 15px 40px rgba(3,129,132,.5))}
+        
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+        
+        .info-container{max-width:900px;width:90%;text-align:center;position:relative;height:120px;display:flex;align-items:center;justify-content:center}
+        .info-message{position:absolute;opacity:0;transform:translateX(-100px);transition:all 2s cubic-bezier(.4,0,.2,1);font-size:1.2rem;font-weight:300;color:var(--accent);width:100%;max-width:700px}
+        .info-message.active{opacity:1;transform:translateX(0)}
+        .info-message.exiting{opacity:0;transform:translateX(100px)}
+        
+        /* Consolidated button styles */
+        .home-navigation{display:flex;gap:1rem;margin-top:3rem;flex-wrap:wrap;justify-content:center}
+        .home-nav-btn,.subsection-btn{background:var(--card-bg);border:2px solid var(--primary);color:var(--accent);padding:1rem 2rem;border-radius:12px;font-size:1rem}
+        .home-nav-btn:hover,.subsection-btn:hover{background:var(--primary);color:var(--black);transform:translateY(-3px);box-shadow:var(--shadow)}
+        .subsection-btn{padding:.8rem 1.5rem;font-size:.9rem}
+        .subsection-btn.active{background:var(--primary);color:var(--black)}
+        
+        /* Optimized content sections with shared structure */
+        .content-section{display:none;min-height:100vh;padding:6rem 2rem 2rem;max-width:1200px;margin:0 auto}
+        .content-section.active{display:block;animation:fadeInUp .6s ease}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        
+        .section-title{font-size:3rem;font-weight:700;color:var(--primary);text-align:center;margin-bottom:3rem;position:relative}
+        .section-title::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:100px;height:3px;background:var(--gradient);border-radius:2px}
+        
+        .section-content,.characters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-top:2rem}
+        .characters-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+        
+        /* Unified card styles for all card types */
+        .card,.character-card{background:var(--card-bg);border:var(--border);border-radius:12px;padding:2rem;transition:var(--transition);position:relative;overflow:hidden}
+        .card::before,.character-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient);transform:scaleX(0);transition:transform .3s ease}
+        .card:hover::before,.character-card:hover::before{transform:scaleX(1)}
+        .card:hover,.character-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+        .card h3,.character-card h3{color:var(--primary);font-size:1.5rem;margin-bottom:1rem;font-weight:600}
+        .card p,.character-card p{color:var(--accent);font-weight:300;margin-bottom:1.5rem}
+        
+        .character-card{text-align:center}
+        .character-card h3{font-size:1.3rem}
+        .character-avatar,.modal-avatar{width:64px;height:64px;border-radius:0;margin-bottom:1rem;image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;border:2px solid var(--primary)}
+        
+        .character-btn{background:var(--primary);color:var(--black);padding:.8rem 1.5rem;border-radius:8px}
+        .character-btn:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 5px 15px rgba(3,129,132,.3)}
+        
+        /* Optimized modal and carousel */
+        .character-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:2000;backdrop-filter:blur(10px)}
+        .character-modal.active{display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease}
+        
+        .modal-content{background:var(--card-bg);border:var(--border);border-radius:16px;padding:2rem;max-width:800px;width:90%;max-height:90vh;overflow-y:auto;position:relative}
+        .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--accent);font-size:2rem;cursor:pointer;transition:color .3s ease}
+        .modal-close:hover{color:var(--primary)}
+        
+        .modal-header{display:flex;align-items:center;gap:1rem;margin-bottom:2rem}
+        .modal-header h2{color:var(--primary);font-size:2rem;font-weight:700}
+        
+        .carousel-container{position:relative;margin-bottom:2rem;border-radius:12px;overflow:hidden;background:rgba(0,0,0,.3)}
+        .carousel{display:flex;transition:transform .3s ease;height:300px}
+        .carousel img{width:100%;height:100%;object-fit:cover;flex-shrink:0}
+        
+        .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(3,129,132,.8);color:white;border:none;width:40px;height:40px;border-radius:50%;font-size:1.5rem;cursor:pointer;transition:var(--transition)}
+        .carousel-btn:hover{background:var(--primary);transform:translateY(-50%) scale(1.1)}
+        .carousel-btn.prev{left:1rem}
+        .carousel-btn.next{right:1rem}
+        
+        .character-info{display:grid;gap:1.5rem}
+        .info-section h3{color:var(--primary);font-size:1.2rem;margin-bottom:.5rem;font-weight:600}
+        .info-section p{color:var(--accent);font-weight:300}
+        
+        /* Optimized subsection content */
+        .subsection-content{display:none;animation:fadeInUp .6s ease}
+        .subsection-content.active{display:block}
+        
+        /* Optimized particles with better performance */
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1}
+        .particle{position:absolute;width:2px;height:2px;background:var(--primary);border-radius:50%;animation:particleFloat 20s linear infinite}
+        @keyframes particleFloat{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:1}80%{opacity:1}90%{opacity:0}100%{transform:translateY(-20vh) translateX(100px);opacity:0}}
+        
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        
+        /* Optimized responsive design with consolidated breakpoints */
+        @media (max-width:768px){
+            .nav{flex-direction:column;gap:1rem}
+            .header-content{flex-direction:column;gap:1rem}
+            .main-logo{max-width:400px}
+            .section-title{font-size:2rem}
+            .info-message{font-size:1rem}
+            .home-navigation{flex-direction:column;align-items:center;gap:.8rem}
+            .home-nav-btn,.subsection-btn{width:200px;padding:.8rem 1.5rem}
+        }
+
+        /* Added styles for construction cards and modal */
+        .construction-card {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 12px;
+            transition: var(--transition);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .construction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        .construction-image {
+            position: relative;
+            overflow: hidden;
+        }
+        .construction-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .construction-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .construction-card:hover .construction-overlay {
+            opacity: 1;
+        }
+        .construction-btn {
+            background: var(--primary);
+            color: var(--black);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .construction-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(3, 129, 132, 0.3);
+        }
+        .construction-content {
+            padding: 2rem;
+            flex-grow: 1;
+        }
+        .construction-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .construction-content p {
+            color: var(--accent);
+            font-weight: 300;
+        }
+
+        .construction-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+        .construction-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn .3s ease;
+        }
+        .construction-modal .modal-content {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .construction-modal .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+        .construction-modal .modal-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .construction-info {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .construction-info .info-section h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: .5rem;
+            font-weight: 600;
+        }
+        .construction-info .info-section p {
+            color: var(--accent);
+            font-weight: 300;
+        }
+    
+html, body {
+  overflow: auto !important;
+  height: 100%;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+html, body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-content,
+.construction-modal .modal-content {
+  overflow: auto !important;
+}
+.modal-content::-webkit-scrollbar,
+.construction-modal .modal-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html, body {
+  overscroll-behavior: none;
+}
+.modal-content,
+.construction-modal .modal-content {
+  overscroll-behavior: contain;
+}
+</style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<header class="header" id="header">
+<div class="header-content">
+<img alt="TECNICRAFT" class="header-logo" id="headerLogo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/TECNICRAFT-3j46rzxCBMihyYRMtbKRFnStT55rYv.png"/>
+<nav class="nav">
+<a class="nav-item active" data-section="home" href="#">Inicio</a>
+<a class="nav-item" data-section="construcciones" href="#">Construcciones</a>
+<a class="nav-item" data-section="galeria" href="#">Galería</a>
+<a class="nav-item" data-section="wallpapers" href="#">Wallpapers</a>
+<a class="nav-item" data-section="dibujos" href="#">Dibujos</a>
+<a class="nav-item" data-section="personajes" href="#">Personajes</a>
+</nav>
+</div>
+</header>
+<main class="main" id="homeSection">
+<div class="logo-container">
+<img alt="TECNICRAFT" class="main-logo" id="mainLogo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/TECNICRAFT-3j46rzxCBMihyYRMtbKRFnStT55rYv.png"/>
+</div>
+<div class="info-container">
+<div class="info-message active">Bienvenido a TECNICRAFT - Tu mundo de creatividad infinita</div>
+<div class="info-message">Explora construcciones épicas y diseños únicos</div>
+<div class="info-message">Descubre galerías llenas de arte y creatividad</div>
+<div class="info-message">Wallpapers exclusivos para personalizar tu experiencia</div>
+</div>
+<div class="home-navigation">
+<button class="home-nav-btn" data-section="construcciones">Construcciones</button>
+<button class="home-nav-btn" data-section="galeria">Galería</button>
+<button class="home-nav-btn" data-section="wallpapers">Wallpapers</button>
+<button class="home-nav-btn" data-section="dibujos">Dibujos</button>
+<button class="home-nav-btn" data-section="personajes">Personajes</button>
+</div>
+</main>
+<!-- Consolidated content sections with shared structure -->
+<section class="content-section" id="construcciones">
+<h2 class="section-title">Construcciones</h2>
+<!-- Added subsections for granjas and estructuras -->
+<div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap;">
+<button class="subsection-btn active" data-subsection="granjas">Granjas</button>
+<button class="subsection-btn" data-subsection="estructuras">Estructuras</button>
+</div>
+<!-- Granjas subsection -->
+<div class="subsection-content active" id="granjas">
+<div class="section-content">
+<!-- Enhanced cards with images and "Ver más" buttons -->
+<div class="construction-card" data-construction="granjas-automaticas">
+<div class="construction-image">
+<img alt="Granjas Automáticas" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Granjas Automáticas</h3>
+<p>Sistemas de cultivo completamente automatizados con redstone avanzado para máxima eficiencia y producción continua.</p>
+</div>
+</div>
+<div class="construction-card" data-construction="granjas-animales">
+<div class="construction-image">
+<img alt="Granjas de Animales" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Granjas de Animales</h3>
+<p>Instalaciones especializadas para la cría y manejo de diferentes especies con diseños optimizados y estéticos.</p>
+</div>
+</div>
+<div class="construction-card" data-construction="invernaderos">
+<div class="construction-image">
+<img alt="Invernaderos" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Invernaderos</h3>
+<p>Estructuras de cristal elegantes para cultivos especiales con sistemas de iluminación y riego integrados.</p>
+</div>
+</div>
+<div class="construction-card" data-construction="granjas-verticales">
+<div class="construction-image">
+<img alt="Granjas Verticales" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Granjas Verticales</h3>
+<p>Torres de cultivo que maximizan el espacio disponible con diseños innovadores y alta productividad.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Estructuras subsection -->
+<div class="subsection-content" id="estructuras">
+<div class="section-content">
+<!-- Enhanced cards with images and "Ver más" buttons -->
+<div class="construction-card" data-construction="castillos-medievales">
+<div class="construction-image">
+<img alt="Castillos Medievales" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Castillos Medievales</h3>
+<p>Impresionantes fortalezas con detalles arquitectónicos únicos, torres imponentes y sistemas de defensa elaborados.</p>
+</div>
+</div>
+<div class="construction-card" data-construction="ciudades-modernas">
+<div class="construction-image">
+<img alt="Ciudades Modernas" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Ciudades Modernas</h3>
+<p>Metrópolis futuristas con rascacielos, sistemas de transporte avanzados y diseños urbanos innovadores.</p>
+</div>
+</div>
+<div class="construction-card" data-construction="templos-antiguos">
+<div class="construction-image">
+<img alt="Templos Antiguos" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Templos Antiguos</h3>
+<p>Estructuras místicas inspiradas en civilizaciones perdidas, con secretos ocultos y arquitectura sagrada.</p>
+</div>
+</div>
+<div class="construction-card" data-construction="puentes-epicos">
+<div class="construction-image">
+<img alt="Puentes Épicos" src="/placeholder.svg?height=200&amp;width=300"/>
+<div class="construction-overlay">
+<button class="construction-btn">Ver más</button>
+</div>
+</div>
+<div class="construction-content">
+<h3>Puentes Épicos</h3>
+<p>Conexiones arquitectónicas impresionantes que combinan funcionalidad con belleza visual extraordinaria.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="content-section" id="galeria">
+<h2 class="section-title">Galería</h2>
+<div class="section-content">
+<div class="card">
+<h3>Screenshots Épicos</h3>
+<p>Capturas de pantalla de los momentos más impresionantes y construcciones más destacadas.</p>
+</div>
+<div class="card">
+<h3>Timelapses</h3>
+<p>Videos acelerados mostrando el proceso de construcción desde cero hasta la obra maestra final.</p>
+</div>
+<div class="card">
+<h3>Renders 3D</h3>
+<p>Visualizaciones tridimensionales de alta calidad que muestran cada detalle de nuestras creaciones.</p>
+</div>
+</div>
+</section>
+<section class="content-section" id="wallpapers">
+<h2 class="section-title">Wallpapers</h2>
+<div class="section-content">
+<div class="card">
+<h3>Paisajes Épicos</h3>
+<p>Fondos de pantalla con vistas panorámicas de mundos creados, perfectos para cualquier dispositivo.</p>
+</div>
+<div class="card">
+<h3>Construcciones Destacadas</h3>
+<p>Wallpapers centrados en nuestras construcciones más impresionantes con iluminación cinematográfica.</p>
+</div>
+<div class="card">
+<h3>Arte Conceptual</h3>
+<p>Diseños artísticos únicos inspirados en el universo TECNICRAFT con estilo minimalista.</p>
+</div>
+</div>
+</section>
+<section class="content-section" id="dibujos">
+<h2 class="section-title">Dibujos</h2>
+<div class="section-content">
+<div class="card">
+<h3>Bocetos Originales</h3>
+<p>Dibujos a mano alzada que muestran las ideas iniciales antes de convertirse en construcciones.</p>
+</div>
+<div class="card">
+<h3>Arte Digital</h3>
+<p>Ilustraciones digitales detalladas con técnicas avanzadas de sombreado y color.</p>
+</div>
+<div class="card">
+<h3>Pixel Art</h3>
+<p>Creaciones en estilo pixel art que capturan la esencia retro con un toque moderno.</p>
+</div>
+</div>
+</section>
+<section class="content-section" id="personajes">
+<h2 class="section-title">Personajes</h2>
+<!-- Replaced generic cards with specific character profiles -->
+<div class="characters-grid">
+<div class="character-card" data-character="enigmaker">
+<img alt="ENIGMAKER" class="character-avatar" height="32" src="Personajes/ENIGMAKER.png" width="32"/>
+<h3>ENIGMAKER</h3>
+<p>Maestro constructor especializado en estructuras complejas y redstone avanzado.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="erifb1200">
+<img alt="erifb1200" class="character-avatar" height="32" src="Personajes/erifb1200.png" width="32"/>
+<h3>erifb1200</h3>
+<p>Experto en granjas automáticas y sistemas de eficiencia máxima.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="yaapo">
+<img alt="Yaapo" class="character-avatar" height="32" src="Personajes/Yaapo.png" width="32"/>
+<h3>Yaapo</h3>
+<p>Arquitecto creativo especializado en diseños únicos y construcciones artísticas.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="mantrix30">
+<img alt="Mantrix30" class="character-avatar" height="32" src="Personajes/Mantrix30.png" width="32"/>
+<h3>Mantrix30</h3>
+<p>Ingeniero de redstone y creador de mecanismos innovadores.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="endercessar789">
+<img alt="EnderCessar789" class="character-avatar" height="32" src="Personajes/EnderCessar789.png" width="32"/>
+<h3>EnderCessar789</h3>
+<p>Especialista en construcciones medievales y castillos épicos.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="hotox">
+<img alt="HOTOX_" class="character-avatar" height="32" src="Personajes/HOTOX_.png" width="32"/>
+<h3>HOTOX_</h3>
+<p>Creador de ciudades modernas y estructuras futuristas.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="alexnenejr">
+<img alt="AlexNenejr" class="character-avatar" height="32" src="Personajes/AlexNenejr.png" width="32"/>
+<h3>AlexNenejr</h3>
+<p>Artista digital y diseñador de skins personalizados únicos.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="losbros">
+<img alt="GLa2" class="character-avatar" height="32" src="Personajes/GLa2.png" width="32"/>
+<h3>GLa2</h3>
+<p>Equipo de constructores especializados en proyectos colaborativos masivos.</p>
+<button class="character-btn">Ver más</button>
+</div>
+<div class="character-card" data-character="veguitagg">
+<img alt="Veguitagg" class="character-avatar" height="32" src="Personajes/Veguitagg.png" width="32"/>
+<h3>Veguitagg</h3>
+<p>Constructor versátil con experiencia en todos los estilos arquitectónicos.</p>
+<button class="character-btn">Ver más</button>
+</div>
+</div>
+</section>
+<!-- Added character popup modal with carousel -->
+<div class="character-modal" id="characterModal">
+<div class="modal-content">
+<button class="modal-close">×</button>
+<div class="modal-header">
+<img alt="" class="modal-avatar" id="modalAvatar" src="/placeholder.svg"/>
+<h2 id="modalName"></h2>
+</div>
+<div class="modal-body">
+<div class="carousel-container">
+<div class="carousel" id="carousel">
+<!-- Images will be loaded dynamically -->
+</div>
+<button class="carousel-btn prev" id="prevBtn">‹</button>
+<button class="carousel-btn next" id="nextBtn">›</button>
+</div>
+<div class="character-info">
+<div class="info-section">
+<h3>Especialidad</h3>
+<p id="modalSpecialty"></p>
+</div>
+<div class="info-section">
+<h3>Proyectos Destacados</h3>
+<p id="modalProjects"></p>
+</div>
+<div class="info-section">
+<h3>Logros</h3>
+<p id="modalAchievements"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Added construction modal with carousel -->
+<div class="construction-modal" id="constructionModal">
+<div class="modal-content">
+<button class="modal-close">×</button>
+<div class="modal-header">
+<h2 id="constructionModalName"></h2>
+</div>
+<div class="modal-body">
+<div class="carousel-container">
+<div class="carousel" id="constructionCarousel">
+                         Images will be loaded dynamically 
+                    </div>
+<button class="carousel-btn prev" id="constructionPrevBtn">‹</button>
+<button class="carousel-btn next" id="constructionNextBtn">›</button>
+</div>
+<div class="construction-info">
+<div class="info-section">
+<h3>Descripción</h3>
+<p id="constructionDescription"></p>
+</div>
+<div class="info-section">
+<h3>Características</h3>
+<p id="constructionFeatures"></p>
+</div>
+<div class="info-section">
+<h3>Materiales Principales</h3>
+<p id="constructionMaterials"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        const elements = {
+            particles: document.getElementById('particles'),
+            messages: document.querySelectorAll('.info-message'),
+            navItems: document.querySelectorAll('.nav-item'),
+            sections: document.querySelectorAll('.content-section'),
+            homeSection: document.getElementById('homeSection'),
+            header: document.getElementById('header'),
+            subsectionBtns: document.querySelectorAll('.subsection-btn'),
+            subsectionContents: document.querySelectorAll('.subsection-content'),
+            characterModal: document.getElementById('characterModal'),
+            constructionModal: document.getElementById('constructionModal'),
+            constructionModalElements: {
+                name: document.getElementById('constructionModalName'),
+                description: document.getElementById('constructionDescription'),
+                features: document.getElementById('constructionFeatures'),
+                materials: document.getElementById('constructionMaterials'),
+                carousel: document.getElementById('constructionCarousel'),
+                prevBtn: document.getElementById('constructionPrevBtn'),
+                nextBtn: document.getElementById('constructionNextBtn')
+            },
+            modalElements: {
+                avatar: document.getElementById('modalAvatar'),
+                name: document.getElementById('modalName'),
+                specialty: document.getElementById('modalSpecialty'),
+                projects: document.getElementById('modalProjects'),
+                achievements: document.getElementById('modalAchievements'),
+                carousel: document.getElementById('carousel'),
+                prevBtn: document.getElementById('prevBtn'),
+                nextBtn: document.getElementById('nextBtn')
+            }
+        };
+        
+        let currentSlide = 0, totalSlides = 0, messageIndex = 0;
+        let constructionCurrentSlide = 0, constructionTotalSlides = 0;
+        
+        const createParticles = () => {
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.cssText = `left:${Math.random() * 100}%;animation-delay:${Math.random() * 20}s;animation-duration:${Math.random() * 10 + 15}s`;
+                fragment.appendChild(particle);
+            }
+            elements.particles.appendChild(fragment);
+        };
+        
+        const rotateMessages = () => {
+            setInterval(() => {
+                const current = elements.messages[messageIndex];
+                current.classList.add('exiting');
+                setTimeout(() => {
+                    current.classList.remove('active', 'exiting');
+                    messageIndex = (messageIndex + 1) % elements.messages.length;
+                    elements.messages[messageIndex].classList.add('active');
+                }, 400);
+            }, 4000);
+        };
+        
+        const navigate = {
+            toSection: (targetSection) => {
+                elements.navItems.forEach(nav => nav.classList.remove('active'));
+                const activeNav = document.querySelector(`[data-section="${targetSection}"]`);
+                if (activeNav?.classList.contains('nav-item')) activeNav.classList.add('active');
+                
+                if (targetSection === 'home') {
+                    elements.homeSection.style.display = 'flex';
+                    elements.sections.forEach(section => section.classList.remove('active'));
+                    elements.header.classList.remove('visible');
+                    document.querySelector('.nav-item[data-section="home"]').classList.add('active');
+                } else {
+                    elements.homeSection.style.display = 'none';
+                    elements.sections.forEach(section => section.classList.remove('active'));
+                    document.getElementById(targetSection).classList.add('active');
+                    elements.header.classList.add('visible');
+                }
+            },
+            toSubsection: (targetSubsection) => {
+                elements.subsectionBtns.forEach(btn => btn.classList.remove('active'));
+                elements.subsectionContents.forEach(content => content.classList.remove('active'));
+                document.querySelector(`[data-subsection="${targetSubsection}"]`).classList.add('active');
+                document.getElementById(targetSubsection).classList.add('active');
+            }
+        };
+        
+        const characterData = {
+            enigmaker: {
+                specialty: "Maestro en construcciones complejas y sistemas de redstone avanzados. Especializado en crear mecanismos únicos y estructuras imposibles.",
+                projects: "Castillo Flotante Automático, Ciudad Subterránea con Metro, Fábrica de Items Completamente Automatizada",
+                achievements: "Más de 500 construcciones completadas, Creador del sistema de redstone más complejo del servidor, Mentor de nuevos constructores",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "Personajes/ENIGMAKER/3.jpg"]
+            },
+            erifb1200: {
+                specialty: "Experto en granjas automáticas y optimización de recursos. Creador de los sistemas más eficientes del servidor.",
+                projects: "Granja Universal de Todos los Items, Sistema de Almacenamiento Infinito, Complejo Agrícola Automatizado",
+                achievements: "Record de eficiencia en granjas automáticas, Diseñador de 50+ tipos de granjas diferentes, Consultor en optimización",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            yaapo: {
+                specialty: "Arquitecto creativo especializado en diseños únicos y construcciones artísticas que desafían la imaginación.",
+                projects: "Biblioteca Celestial, Jardines Colgantes Modernos, Museo de Arte Interactivo",
+                achievements: "Ganador de 3 concursos de construcción, Creador de más de 200 diseños únicos, Inspiración para la comunidad",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            mantrix30: {
+                specialty: "Ingeniero de redstone y creador de mecanismos innovadores. Especialista en automatización y sistemas complejos.",
+                projects: "Computadora Funcional en Minecraft, Sistema de Transporte Inteligente, Robot Constructor Automático",
+                achievements: "Inventor de 15 mecanismos únicos, Creador de la primera IA básica en redstone, Profesor de ingeniería redstone",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            endercessar789: {
+                specialty: "Especialista en construcciones medievales y castillos épicos. Maestro en arquitectura histórica y defensiva.",
+                projects: "Fortaleza de las Mil Torres, Ciudad Medieval Completa, Catedral Gótica Monumental",
+                achievements: "Constructor de 25 castillos únicos, Experto en arquitectura medieval, Creador de la ciudad más grande del servidor",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            hotox: {
+                specialty: "Creador de ciudades modernas y estructuras futuristas. Visionario de la arquitectura del mañana.",
+                projects: "Metrópolis Neo-Tokyo, Rascacielos Inteligentes, Ciudad Espacial Orbital",
+                achievements: "Diseñador de 10 ciudades futuristas, Pionero en arquitectura espacial, Creador de edificios inteligentes",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            alexnenejr: {
+                specialty: "Artista digital y diseñador de skins personalizados únicos. Creador de identidades visuales memorables.",
+                projects: "Colección de 500+ Skins Únicos, Galería de Arte Pixel, Estudio de Diseño Virtual",
+                achievements: "Más de 1000 skins creados, Artista oficial del servidor, Mentor en diseño digital",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            losbros: {
+                specialty: "Equipo de constructores especializados en proyectos colaborativos masivos. Maestros del trabajo en equipo.",
+                projects: "Mundo Temático Completo, Parque de Diversiones Gigante, Recreación de Ciudades Reales",
+                achievements: "Líderes en proyectos colaborativos, Constructores de las estructuras más grandes, Organizadores de eventos de construcción",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            },
+            veguitagg: {
+                specialty: "Constructor versátil con experiencia en todos los estilos arquitectónicos. Maestro de la adaptabilidad.",
+                projects: "Museo de Estilos Arquitectónicos, Villa Multicultural, Complejo de Entretenimiento",
+                achievements: "Experto en 20+ estilos diferentes, Constructor más versátil del servidor, Creador de tutoriales populares",
+                images: ["/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800", "/placeholder.svg?height=300&width=800"]
+            }
+        };
+        
+        const modal = {
+            open: (characterId) => {
+                const data = characterData[characterId];
+                if (!data) return;
+                
+                const characterCard = document.querySelector(`[data-character="${characterId}"]`);
+                const originalAvatar = characterCard.querySelector('.character-avatar');
+                
+                elements.modalElements.avatar.src = originalAvatar.src;
+                elements.modalElements.avatar.alt = characterId;
+                elements.modalElements.name.textContent = characterId.toUpperCase();
+                elements.modalElements.specialty.textContent = data.specialty;
+                elements.modalElements.projects.textContent = data.projects;
+                elements.modalElements.achievements.textContent = data.achievements;
+                
+                elements.modalElements.carousel.innerHTML = '';
+                data.images.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = `${characterId} project`;
+                    elements.modalElements.carousel.appendChild(img);
+                });
+                
+                totalSlides = data.images.length;
+                currentSlide = 0;
+                carousel.update();
+                elements.characterModal.classList.add('active');
+            },
+            close: () => elements.characterModal.classList.remove('active')
+        };
+        
+        const carousel = {
+            update: () => {
+                elements.modalElements.carousel.style.transform = `translateX(${-currentSlide * 100}%)`;
+            },
+            next: () => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                carousel.update();
+            },
+            prev: () => {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                carousel.update();
+            }
+        };
+
+        const constructionData = {
+            'granjas-automaticas': {
+                name: 'Granjas Automáticas',
+                description: 'Sistemas de cultivo completamente automatizados que utilizan redstone avanzado para crear mecanismos de siembra, cosecha y almacenamiento. Estas granjas pueden producir miles de items por hora sin intervención manual, optimizando cada aspecto del proceso agrícola.',
+                features: 'Siembra automática, Cosecha por pistones, Sistema de almacenamiento inteligente, Indicadores de estado, Compatibilidad con hoppers, Diseño escalable',
+                materials: 'Redstone, Pistones, Hoppers, Dispensadores, Observadores, Bloques de construcción varios',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'granjas-animales': {
+                name: 'Granjas de Animales',
+                description: 'Instalaciones especializadas diseñadas para la cría eficiente de diferentes especies animales. Cada granja está optimizada para las necesidades específicas de cada animal, garantizando su bienestar y máxima productividad.',
+                features: 'Áreas de cría separadas, Sistemas de alimentación automática, Recolección de productos, Diseño estético, Fácil acceso para mantenimiento',
+                materials: 'Vallas, Puertas, Dispensadores de comida, Hoppers, Bloques decorativos, Agua y lava para mecanismos',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'invernaderos': {
+                name: 'Invernaderos',
+                description: 'Estructuras de cristal elegantes que crean el ambiente perfecto para cultivos especiales. Incorporan sistemas avanzados de iluminación, riego y control climático para maximizar el crecimiento de las plantas.',
+                features: 'Estructura de cristal, Iluminación LED integrada, Sistema de riego por goteo, Control de temperatura, Diseño modular, Acceso fácil para mantenimiento',
+                materials: 'Cristal, Glowstone, Agua, Dispensadores, Redstone, Bloques de construcción decorativos',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'granjas-verticales': {
+                name: 'Granjas Verticales',
+                description: 'Torres de cultivo innovadoras que maximizan la producción en espacios reducidos. Utilizan diseños verticales inteligentes para crear múltiples niveles de cultivo con sistemas automatizados integrados.',
+                features: 'Diseño vertical compacto, Múltiples niveles de cultivo, Sistemas de transporte vertical, Iluminación por niveles, Acceso por escaleras o ascensores',
+                materials: 'Bloques de construcción resistentes, Escaleras, Pistones, Redstone, Glowstone, Hoppers',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'castillos-medievales': {
+                name: 'Castillos Medievales',
+                description: 'Impresionantes fortalezas que recrean la grandeza de la arquitectura medieval. Cada castillo incluye torres imponentes, murallas defensivas, salones reales y sistemas de defensa elaborados que transportan a los visitantes a otra época.',
+                features: 'Torres de vigilancia, Murallas defensivas, Salón del trono, Mazmorras, Puente levadizo, Sistemas de defensa con dispensadores',
+                materials: 'Piedra, Ladrillos de piedra, Madera de roble, Hierro, Cristal, Antorchas, Lana para banderas',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'ciudades-modernas': {
+                name: 'Ciudades Modernas',
+                description: 'Metrópolis futuristas que combinan rascacielos impresionantes con sistemas de transporte avanzados. Estas ciudades incluyen distritos comerciales, residenciales y de entretenimiento con diseños urbanos innovadores.',
+                features: 'Rascacielos de cristal, Sistema de metro, Distritos temáticos, Iluminación nocturna, Parques urbanos, Centros comerciales',
+                materials: 'Cristal, Hormigón, Hierro, Glowstone, Redstone para iluminación, Bloques de cuarzo',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'templos-antiguos': {
+                name: 'Templos Antiguos',
+                description: 'Estructuras místicas inspiradas en civilizaciones perdidas que combinan arquitectura sagrada con secretos ocultos. Cada templo cuenta una historia única a través de sus pasillos, cámaras secretas y decoraciones ancestrales.',
+                features: 'Arquitectura sagrada, Cámaras secretas, Trampas antiguas, Decoraciones místicas, Altares ceremoniales, Pasadizos ocultos',
+                materials: 'Piedra antigua, Oro, Lapislázuli, Obsidiana, Antorchas, Bloques decorativos especiales',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            },
+            'puentes-epicos': {
+                name: 'Puentes Épicos',
+                description: 'Conexiones arquitectónicas impresionantes que no solo cumplen una función práctica, sino que se convierten en obras de arte. Cada puente combina ingeniería avanzada con belleza visual extraordinaria.',
+                features: 'Diseño arquitectónico único, Iluminación decorativa, Materiales premium, Vistas panorámicas, Accesos elegantes, Detalles ornamentales',
+                materials: 'Piedra pulida, Hierro, Cristal, Glowstone, Bloques de cuarzo, Materiales decorativos variados',
+                images: [
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800',
+                    '/placeholder.svg?height=300&width=800'
+                ]
+            }
+        };
+
+        const constructionModal = {
+            open: (constructionId) => {
+                const data = constructionData[constructionId];
+                if (!data) return;
+                
+                elements.constructionModalElements.name.textContent = data.name;
+                elements.constructionModalElements.description.textContent = data.description;
+                elements.constructionModalElements.features.textContent = data.features;
+                elements.constructionModalElements.materials.textContent = data.materials;
+                
+                elements.constructionModalElements.carousel.innerHTML = '';
+                data.images.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = `${data.name} project`;
+                    elements.constructionModalElements.carousel.appendChild(img);
+                });
+                
+                constructionTotalSlides = data.images.length;
+                constructionCurrentSlide = 0;
+                constructionCarousel.update();
+                elements.constructionModal.classList.add('active');
+            },
+            close: () => elements.constructionModal.classList.remove('active')
+        };
+        
+        const constructionCarousel = {
+            update: () => {
+                elements.constructionModalElements.carousel.style.transform = `translateX(${-constructionCurrentSlide * 100}%)`;
+            },
+            next: () => {
+                constructionCurrentSlide = (constructionCurrentSlide + 1) % constructionTotalSlides;
+                constructionCarousel.update();
+            },
+            prev: () => {
+                constructionCurrentSlide = (constructionCurrentSlide - 1 + constructionTotalSlides) % constructionTotalSlides;
+                constructionCarousel.update();
+            }
+        };
+
+        document.addEventListener('click', (e) => {
+            const { target } = e;
+            const section = target.getAttribute('data-section');
+            const subsection = target.getAttribute('data-subsection');
+            
+            if (section && (target.classList.contains('nav-item') || target.classList.contains('home-nav-btn'))) {
+                e.preventDefault();
+                navigate.toSection(section);
+            }
+            
+            if (subsection && target.classList.contains('subsection-btn')) {
+                e.preventDefault();
+                navigate.toSubsection(subsection);
+            }
+            
+            if (target.classList.contains('character-btn')) {
+                const characterId = target.closest('.character-card').getAttribute('data-character');
+                modal.open(characterId);
+            }
+            
+            if (target.classList.contains('construction-btn')) {
+                const constructionId = target.closest('.construction-card').getAttribute('data-construction');
+                constructionModal.open(constructionId);
+            }
+            
+            if (target.classList.contains('modal-close') || target === elements.characterModal) {
+                modal.close();
+            }
+            
+            if (target.classList.contains('modal-close') || target === elements.constructionModal) {
+                constructionModal.close();
+            }
+        });
+        
+        elements.modalElements.prevBtn.addEventListener('click', carousel.prev);
+        elements.modalElements.nextBtn.addEventListener('click', carousel.next);
+        
+        elements.constructionModalElements.prevBtn.addEventListener('click', constructionCarousel.prev);
+        elements.constructionModalElements.nextBtn.addEventListener('click', constructionCarousel.next);
+        
+        document.addEventListener('keydown', (e) => {
+            if (!elements.characterModal.classList.contains('active') && !elements.constructionModal.classList.contains('active')) return;
+            
+            const actions = {
+                'Escape': () => {
+                    modal.close();
+                    constructionModal.close();
+                },
+                'ArrowLeft': () => {
+                    if (elements.characterModal.classList.contains('active')) carousel.prev();
+                    if (elements.constructionModal.classList.contains('active')) constructionCarousel.prev();
+                },
+                'ArrowRight': () => {
+                    if (elements.characterModal.classList.contains('active')) carousel.next();
+                    if (elements.constructionModal.classList.contains('active')) constructionCarousel.next();
+                }
+            };
+            
+            actions[e.key]?.();
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            rotateMessages();
+            document.documentElement.style.scrollBehavior = 'smooth';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECNICRAFT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Optimized CSS with consolidated rules and improved performance */
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--primary:#038184;--secondary:#21717a;--accent:#4fa8ae;--black:#000}
+        body{font-family:Inter,sans-serif;background:linear-gradient(135deg,var(--black) 0%,var(--secondary) 100%);color:var(--accent);min-height:100vh;overflow-x:hidden}
+        
+        /* Header optimizations */
+        .header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--primary);transform:translateY(-100%);transition:transform .6s cubic-bezier(.4,0,.2,1)}
+        .header.visible{transform:translateY(0)}
+        .header-content{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;max-width:1200px;margin:0 auto}
+        .header-logo{height:40px;cursor:pointer;transition:all .3s ease}
+        .header-logo:hover{transform:scale(1.05);filter:brightness(1.2)}
+        .nav{display:flex;gap:2rem}
+        
+        /* Navigation items with shared hover effects */
+        .nav-item,.home-nav-btn{position:relative;overflow:hidden;transition:all .3s ease;cursor:pointer}
+        .nav-item::before,.home-nav-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--primary),transparent);transition:left .5s ease}
+        .nav-item:hover::before,.home-nav-btn:hover::before{left:100%}
+        
+        .nav-item{color:var(--accent);text-decoration:none;font-weight:500;padding:.5rem 1rem;border-radius:8px}
+        .nav-item:hover{color:var(--primary);background:rgba(3,129,132,.1)}
+        .nav-item.active{background:var(--primary);color:var(--black)}
+        
+        /* Main content optimizations */
+        .main{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 2rem;position:relative}
+        .logo-container{margin:0;position:relative}
+        .main-logo{max-width:600px;width:100%;height:auto;filter:drop-shadow(0 10px 30px rgba(3,129,132,.3));animation:float 6s ease-in-out infinite;cursor:pointer;transition:all .3s ease}
+        .main-logo:hover{transform:scale(1.05);filter:drop-shadow(0 15px 40px rgba(3,129,132,.5))}
+        
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+        
+        .info-container{max-width:900px;width:90%;text-align:center;position:relative;height:120px;display:flex;align-items:center;justify-content:center}
+        .info-message{position:absolute;opacity:0;transform:translateX(-100px);transition:all 2s cubic-bezier(.4,0,.2,1);font-size:1.2rem;font-weight:300;line-height:1.6;color:var(--accent);width:100%;max-width:700px;text-align:center}
+        .info-message.active{opacity:1;transform:translateX(0)}
+        .info-message.exiting{opacity:0;transform:translateX(100px)}
+        
+        /* Navigation buttons */
+        .home-navigation{display:flex;gap:1rem;margin-top:3rem;flex-wrap:wrap;justify-content:center}
+        .home-nav-btn{background:rgba(3,129,132,.1);border:2px solid var(--primary);color:var(--accent);padding:1rem 2rem;border-radius:12px;font-family:Inter,sans-serif;font-weight:500;font-size:1rem}
+        .home-nav-btn:hover{background:var(--primary);color:var(--black);transform:translateY(-3px);box-shadow:0 10px 25px rgba(3,129,132,.3)}
+        
+        /* Content sections */
+        .content-section{display:none;min-height:100vh;padding:6rem 2rem 2rem;max-width:1200px;margin:0 auto}
+        .content-section.active{display:block;animation:fadeInUp .6s ease}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        
+        .section-title{font-size:3rem;font-weight:700;color:var(--primary);text-align:center;margin-bottom:3rem;position:relative}
+        .section-title::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:100px;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:2px}
+        
+        .section-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-top:2rem}
+        
+        /* Card optimizations */
+        .card{background:rgba(3,129,132,.1);border:1px solid var(--primary);border-radius:12px;padding:2rem;transition:all .3s ease;position:relative;overflow:hidden}
+        .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transition:transform .3s ease}
+        .card:hover::before{transform:scaleX(1)}
+        .card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(3,129,132,.2)}
+        .card h3{color:var(--primary);font-size:1.5rem;margin-bottom:1rem;font-weight:600}
+        .card p{color:var(--accent);line-height:1.6;font-weight:300}
+        
+        /* Subsection buttons */
+        .subsection-btn{background:rgba(3,129,132,.1);border:2px solid var(--primary);color:var(--accent);padding:.8rem 1.5rem;border-radius:8px;font-family:Inter,sans-serif;font-weight:500;font-size:.9rem;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden}
+        .subsection-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--primary),transparent);transition:left .5s ease}
+        .subsection-btn:hover::before{left:100%}
+        .subsection-btn:hover{background:var(--primary);color:var(--black);transform:translateY(-2px)}
+        .subsection-btn.active{background:var(--primary);color:var(--black)}
+        
+        /* Subsection content */
+        .subsection-content{display:none;animation:fadeInUp .6s ease}
+        .subsection-content.active{display:block}
+        
+        /* Particles */
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1}
+        .particle{position:absolute;width:2px;height:2px;background:var(--primary);border-radius:50%;animation:particleFloat 20s linear infinite}
+        @keyframes particleFloat{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:1}80%{opacity:1}90%{opacity:0}100%{transform:translateY(-20vh) translateX(100px);opacity:0}}
+        
+        /* Responsive optimizations */
+        @media (max-width:768px){
+            .nav{flex-direction:column;gap:1rem}
+            .header-content{flex-direction:column;gap:1rem}
+            .main-logo{max-width:400px}
+            .section-title{font-size:2rem}
+            .info-message{font-size:1rem}
+            .home-navigation{flex-direction:column;align-items:center;gap:.8rem}
+            .home-nav-btn{width:200px;padding:.8rem 1.5rem}
+            .subsection-btn{width:200px;padding:.8rem 1.5rem}
+        }
+        
+        /* Character-specific styles */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .character-card {
+            background: rgba(3,129,132,.1);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all .3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform .3s ease;
+        }
+        
+        .character-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(3,129,132,.2);
+        }
+        
+        .character-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border: 2px solid var(--primary);
+        }
+        
+        .character-card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .character-card p {
+            color: var(--accent);
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+        
+        .character-btn {
+            background: var(--primary);
+            color: var(--black);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-family: Inter, sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+        
+        .character-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(3,129,132,.3);
+        }
+        
+        /* Modal styles */
+        .character-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.9);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .character-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn .3s ease;
+        }
+        
+        .modal-content {
+            background: rgba(3,129,132,.1);
+            border: 1px solid var(--primary);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color .3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            border: 2px solid var(--primary);
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .carousel-container {
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,.3);
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform .3s ease;
+            height: 300px;
+        }
+        
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(3,129,132,.8);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+        
+        .carousel-btn:hover {
+            background: var(--primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-btn.prev {
+            left: 1rem;
+        }
+        
+        .carousel-btn.next {
+            right: 1rem;
+        }
+        
+        .character-info {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .info-section h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .info-section p {
+            color: var(--accent);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <header class="header" id="header">
+        <div class="header-content">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/TECNICRAFT-3j46rzxCBMihyYRMtbKRFnStT55rYv.png" alt="TECNICRAFT" class="header-logo" id="headerLogo">
+            <nav class="nav">
+                <a href="#" class="nav-item active" data-section="home">Inicio</a>
+                <a href="#" class="nav-item" data-section="construcciones">Construcciones</a>
+                <a href="#" class="nav-item" data-section="galeria">Galería</a>
+                <a href="#" class="nav-item" data-section="wallpapers">Wallpapers</a>
+                <a href="#" class="nav-item" data-section="dibujos">Dibujos</a>
+                <a href="#" class="nav-item" data-section="personajes">Personajes</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="main" id="homeSection">
+        <div class="logo-container">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/TECNICRAFT-3j46rzxCBMihyYRMtbKRFnStT55rYv.png" alt="TECNICRAFT" class="main-logo" id="mainLogo">
+        </div>
+        <div class="info-container">
+            <div class="info-message active">Bienvenido a TECNICRAFT - Tu mundo de creatividad infinita</div>
+            <div class="info-message">Explora construcciones épicas y diseños únicos</div>
+            <div class="info-message">Descubre galerías llenas de arte y creatividad</div>
+            <div class="info-message">Wallpapers exclusivos para personalizar tu experiencia</div>
+        </div>
+        
+        <div class="home-navigation">
+            <button class="home-nav-btn" data-section="construcciones">Construcciones</button>
+            <button class="home-nav-btn" data-section="galeria">Galería</button>
+            <button class="home-nav-btn" data-section="wallpapers">Wallpapers</button>
+            <button class="home-nav-btn" data-section="dibujos">Dibujos</button>
+            <button class="home-nav-btn" data-section="personajes">Personajes</button>
+        </div>
+    </main>
+    
+    <!-- Consolidated content sections with shared structure -->
+    <section class="content-section" id="construcciones">
+        <h2 class="section-title">Construcciones</h2>
+        
+        <!-- Added subsections for granjas and estructuras -->
+        <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap;">
+            <button class="subsection-btn active" data-subsection="granjas">Granjas</button>
+            <button class="subsection-btn" data-subsection="estructuras">Estructuras</button>
+        </div>
+        
+        <!-- Granjas subsection -->
+        <div class="subsection-content active" id="granjas">
+            <div class="section-content">
+                <div class="card">
+                    <h3>Granjas Automáticas</h3>
+                    <p>Sistemas de cultivo completamente automatizados con redstone avanzado para máxima eficiencia y producción continua.</p>
+                </div>
+                <div class="card">
+                    <h3>Granjas de Animales</h3>
+                    <p>Instalaciones especializadas para la cría y manejo de diferentes especies con diseños optimizados y estéticos.</p>
+                </div>
+                <div class="card">
+                    <h3>Invernaderos</h3>
+                    <p>Estructuras de cristal elegantes para cultivos especiales con sistemas de iluminación y riego integrados.</p>
+                </div>
+                <div class="card">
+                    <h3>Granjas Verticales</h3>
+                    <p>Torres de cultivo que maximizan el espacio disponible con diseños innovadores y alta productividad.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estructuras subsection -->
+        <div class="subsection-content" id="estructuras">
+            <div class="section-content">
+                <div class="card">
+                    <h3>Castillos Medievales</h3>
+                    <p>Impresionantes fortalezas con detalles arquitectónicos únicos, torres imponentes y sistemas de defensa elaborados.</p>
+                </div>
+                <div class="card">
+                    <h3>Ciudades Modernas</h3>
+                    <p>Metrópolis futuristas con rascacielos, sistemas de transporte avanzados y diseños urbanos innovadores.</p>
+                </div>
+                <div class="card">
+                    <h3>Templos Antiguos</h3>
+                    <p>Estructuras místicas inspiradas en civilizaciones perdidas, con secretos ocultos y arquitectura sagrada.</p>
+                </div>
+                <div class="card">
+                    <h3>Puentes Épicos</h3>
+                    <p>Conexiones arquitectónicas impresionantes que combinan funcionalidad con belleza visual extraordinaria.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="galeria">
+        <h2 class="section-title">Galería</h2>
+        <div class="section-content">
+            <div class="card">
+                <h3>Screenshots Épicos</h3>
+                <p>Capturas de pantalla de los momentos más impresionantes y construcciones más destacadas.</p>
+            </div>
+            <div class="card">
+                <h3>Timelapses</h3>
+                <p>Videos acelerados mostrando el proceso de construcción desde cero hasta la obra maestra final.</p>
+            </div>
+            <div class="card">
+                <h3>Renders 3D</h3>
+                <p>Visualizaciones tridimensionales de alta calidad que muestran cada detalle de nuestras creaciones.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="wallpapers">
+        <h2 class="section-title">Wallpapers</h2>
+        <div class="section-content">
+            <div class="card">
+                <h3>Paisajes Épicos</h3>
+                <p>Fondos de pantalla con vistas panorámicas de mundos creados, perfectos para cualquier dispositivo.</p>
+            </div>
+            <div class="card">
+                <h3>Construcciones Destacadas</h3>
+                <p>Wallpapers centrados en nuestras construcciones más impresionantes con iluminación cinematográfica.</p>
+            </div>
+            <div class="card">
+                <h3>Arte Conceptual</h3>
+                <p>Diseños artísticos únicos inspirados en el universo TECNICRAFT con estilo minimalista.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="dibujos">
+        <h2 class="section-title">Dibujos</h2>
+        <div class="section-content">
+            <div class="card">
+                <h3>Bocetos Originales</h3>
+                <p>Dibujos a mano alzada que muestran las ideas iniciales antes de convertirse en construcciones.</p>
+            </div>
+            <div class="card">
+                <h3>Arte Digital</h3>
+                <p>Ilustraciones digitales detalladas con técnicas avanzadas de sombreado y color.</p>
+            </div>
+            <div class="card">
+                <h3>Pixel Art</h3>
+                <p>Creaciones en estilo pixel art que capturan la esencia retro con un toque moderno.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="content-section" id="personajes">
+        <h2 class="section-title">Personajes</h2>
+        
+        <!-- Replaced generic cards with specific character profiles -->
+        <div class="characters-grid">
+            <div class="character-card" data-character="enigmaker">
+                <img src="Personajes/ENIGMAKER.png" alt="ENIGMAKER" class="character-avatar" width="32" height="32">
+                <h3>ENIGMAKER</h3>
+                <p>Maestro constructor especializado en estructuras complejas y redstone avanzado.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="erifb1200">
+                <img src="Personajes/erifb1200.png" alt="erifb1200" class="character-avatar" width="32" height="32">
+                <h3>erifb1200</h3>
+                <p>Experto en granjas automáticas y sistemas de eficiencia máxima.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="yaapo">
+                <img src="Personajes/Yaapo.png" alt="Yaapo" class="character-avatar" width="32" height="32">
+                <h3>Yaapo</h3>
+                <p>Arquitecto creativo especializado en diseños únicos y construcciones artísticas.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="mantrix30">
+                <img src="Personajes/Mantrix30.png" alt="Mantrix30" class="character-avatar" width="32" height="32">
+                <h3>Mantrix30</h3>
+                <p>Ingeniero de redstone y creador de mecanismos innovadores.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="endercessar789">
+                <img src="Personajes/EnderCessar789.png" alt="EnderCessar789" class="character-avatar" width="32" height="32">
+                <h3>EnderCessar789</h3>
+                <p>Especialista en construcciones medievales y castillos épicos.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="hotox">
+                <img src="Personajes/HOTOX_.png" alt="HOTOX_" class="character-avatar" width="32" height="32">
+                <h3>HOTOX_</h3>
+                <p>Creador de ciudades modernas y estructuras futuristas.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="alexnenejr">
+                <img src="Personajes/AlexNenejr.png" alt="AlexNenejr" class="character-avatar" width="32" height="32">
+                <h3>AlexNenejr</h3>
+                <p>Artista digital y diseñador de skins personalizados únicos.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="losbros">
+                <img src="Personajes/GLa2.png" alt="GLa2" class="character-avatar" width="32" height="32">
+                <h3>GLa2</h3>
+                <p>Equipo de constructores especializados en proyectos colaborativos masivos.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+            
+            <div class="character-card" data-character="veguitagg">
+                <img src="Personajes/Veguitagg.png" alt="Veguitagg" class="character-avatar" width="32" height="32">
+                <h3>Veguitagg</h3>
+                <p>Constructor versátil con experiencia en todos los estilos arquitectónicos.</p>
+                <button class="character-btn">Ver más</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Added character popup modal with carousel -->
+    <div class="character-modal" id="characterModal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-header">
+                <img src="/placeholder.svg" alt="" class="modal-avatar" id="modalAvatar">
+                <h2 id="modalName"></h2>
+            </div>
+            
+            <div class="modal-body">
+                <div class="carousel-container">
+                    <div class="carousel" id="carousel">
+                        <!-- Images will be loaded dynamically -->
+                    </div>
+                    <button class="carousel-btn prev" id="prevBtn">‹</button>
+                    <button class="carousel-btn next" id="nextBtn">›</button>
+                </div>
+                
+                <div class="character-info">
+                    <div class="info-section">
+                        <h3>Especialidad</h3>
+                        <p id="modalSpecialty"></p>
+                    </div>
+                    <div class="info-section">
+                        <h3>Proyectos Destacados</h3>
+                        <p id="modalProjects"></p>
+                    </div>
+                    <div class="info-section">
+                        <h3>Logros</h3>
+                        <p id="modalAchievements"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const particlesContainer = document.getElementById('particles');
+        const messages = document.querySelectorAll('.info-message');
+        const navItems = document.querySelectorAll('.nav-item');
+        const homeNavBtns = document.querySelectorAll('.home-nav-btn');
+        const sections = document.querySelectorAll('.content-section');
+        const homeSection = document.getElementById('homeSection');
+        const header = document.getElementById('header');
+        
+        const subsectionBtns = document.querySelectorAll('.subsection-btn');
+        const subsectionContents = document.querySelectorAll('.subsection-content');
+        
+        // Optimized particle creation
+        function createParticles() {
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.cssText = `left:${Math.random() * 100}%;animation-delay:${Math.random() * 20}s;animation-duration:${Math.random() * 10 + 15}s`;
+                fragment.appendChild(particle);
+            }
+            particlesContainer.appendChild(fragment);
+        }
+        
+        // Optimized message rotation
+        function rotateMessages() {
+            let currentIndex = 0;
+            setInterval(() => {
+                messages[currentIndex].classList.add('exiting');
+                setTimeout(() => {
+                    messages[currentIndex].classList.remove('active', 'exiting');
+                    currentIndex = (currentIndex + 1) % messages.length;
+                    messages[currentIndex].classList.add('active');
+                }, 400);
+            }, 4000);
+        }
+        
+        function navigateToSubsection(targetSubsection) {
+            subsectionBtns.forEach(btn => btn.classList.remove('active'));
+            subsectionContents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-subsection="${targetSubsection}"]`).classList.add('active');
+            document.getElementById(targetSubsection).classList.add('active');
+        }
+        
+        // Optimized navigation with event delegation
+        function navigateToSection(targetSection) {
+            navItems.forEach(nav => nav.classList.remove('active'));
+            const activeNav = document.querySelector(`[data-section="${targetSection}"]`);
+            if (activeNav?.classList.contains('nav-item')) {
+                activeNav.classList.add('active');
+            }
+            
+            if (targetSection === 'home') {
+                homeSection.style.display = 'flex';
+                sections.forEach(section => section.classList.remove('active'));
+                header.classList.remove('visible');
+                document.querySelector('.nav-item[data-section="home"]').classList.add('active');
+            } else {
+                homeSection.style.display = 'none';
+                sections.forEach(section => section.classList.remove('active'));
+                document.getElementById(targetSection).classList.add('active');
+                header.classList.add('visible');
+            }
+        }
+        
+        // Event listeners with delegation
+        document.addEventListener('click', (e) => {
+            const section = e.target.getAttribute('data-section');
+            const subsection = e.target.getAttribute('data-subsection');
+            
+            if (section && (e.target.classList.contains('nav-item') || e.target.classList.contains('home-nav-btn'))) {
+                e.preventDefault();
+                navigateToSection(section);
+            }
+            
+            if (subsection && e.target.classList.contains('subsection-btn')) {
+                e.preventDefault();
+                navigateToSubsection(subsection);
+            }
+        });
+        
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            rotateMessages();
+            document.documentElement.style.scrollBehavior = 'smooth';
+        });
+        
+        // Character modal functionality
+        const characterModal = document.getElementById('characterModal');
+        const modalAvatar = document.getElementById('modalAvatar');
+        const modalName = document.getElementById('modalName');
+        const modalSpecialty = document.getElementById('modalSpecialty');
+        const modalProjects = document.getElementById('modalProjects');
+        const modalAchievements = document.getElementById('modalAchievements');
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        let currentSlide = 0;
+        let totalSlides = 0;
+        
+        // Character data
+        const characterData = {
+            enigmaker: {
+                specialty: "Maestro en construcciones complejas y sistemas de redstone avanzados. Especializado en crear mecanismos únicos y estructuras imposibles.",
+                projects: "Castillo Flotante Automático, Ciudad Subterránea con Metro, Fábrica de Items Completamente Automatizada",
+                achievements: "Más de 500 construcciones completadas, Creador del sistema de redstone más complejo del servidor, Mentor de nuevos constructores",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "Personajes/ENIGMAKER/3.jpg"
+                ]
+            },
+            erifb1200: {
+                specialty: "Experto en granjas automáticas y optimización de recursos. Creador de los sistemas más eficientes del servidor.",
+                projects: "Granja Universal de Todos los Items, Sistema de Almacenamiento Infinito, Complejo Agrícola Automatizado",
+                achievements: "Record de eficiencia en granjas automáticas, Diseñador de 50+ tipos de granjas diferentes, Consultor en optimización",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            yaapo: {
+                specialty: "Arquitecto creativo especializado en diseños únicos y construcciones artísticas que desafían la imaginación.",
+                projects: "Biblioteca Celestial, Jardines Colgantes Modernos, Museo de Arte Interactivo",
+                achievements: "Ganador de 3 concursos de construcción, Creador de más de 200 diseños únicos, Inspiración para la comunidad",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            mantrix30: {
+                specialty: "Ingeniero de redstone y creador de mecanismos innovadores. Especialista en automatización y sistemas complejos.",
+                projects: "Computadora Funcional en Minecraft, Sistema de Transporte Inteligente, Robot Constructor Automático",
+                achievements: "Inventor de 15 mecanismos únicos, Creador de la primera IA básica en redstone, Profesor de ingeniería redstone",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            endercessar789: {
+                specialty: "Especialista en construcciones medievales y castillos épicos. Maestro en arquitectura histórica y defensiva.",
+                projects: "Fortaleza de las Mil Torres, Ciudad Medieval Completa, Catedral Gótica Monumental",
+                achievements: "Constructor de 25 castillos únicos, Experto en arquitectura medieval, Creador de la ciudad más grande del servidor",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            hotox: {
+                specialty: "Creador de ciudades modernas y estructuras futuristas. Visionario de la arquitectura del mañana.",
+                projects: "Metrópolis Neo-Tokyo, Rascacielos Inteligentes, Ciudad Espacial Orbital",
+                achievements: "Diseñador de 10 ciudades futuristas, Pionero en arquitectura espacial, Creador de edificios inteligentes",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            alexnenejr: {
+                specialty: "Artista digital y diseñador de skins personalizados únicos. Creador de identidades visuales memorables.",
+                projects: "Colección de 500+ Skins Únicos, Galería de Arte Pixel, Estudio de Diseño Virtual",
+                achievements: "Más de 1000 skins creados, Artista oficial del servidor, Mentor en diseño digital",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            losbros: {
+                specialty: "Equipo de constructores especializados en proyectos colaborativos masivos. Maestros del trabajo en equipo.",
+                projects: "Mundo Temático Completo, Parque de Diversiones Gigante, Recreación de Ciudades Reales",
+                achievements: "Líderes en proyectos colaborativos, Constructores de las estructuras más grandes, Organizadores de eventos de construcción",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            },
+            veguitagg: {
+                specialty: "Constructor versátil con experiencia en todos los estilos arquitectónicos. Maestro de la adaptabilidad.",
+                projects: "Museo de Estilos Arquitectónicos, Villa Multicultural, Complejo de Entretenimiento",
+                achievements: "Experto en 20+ estilos diferentes, Constructor más versátil del servidor, Creador de tutoriales populares",
+                images: [
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800",
+                    "/placeholder.svg?height=300&width=800"
+                ]
+            }
+        };
+        
+        function openCharacterModal(characterId) {
+            const data = characterData[characterId];
+            if (!data) return;
+            
+            const characterCard = document.querySelector(`[data-character="${characterId}"]`);
+            const originalAvatar = characterCard.querySelector('.character-avatar');
+            modalAvatar.src = originalAvatar.src;
+            modalAvatar.alt = characterId;
+            modalName.textContent = characterId.toUpperCase();
+            modalSpecialty.textContent = data.specialty;
+            modalProjects.textContent = data.projects;
+            modalAchievements.textContent = data.achievements;
+            
+            // Load carousel images
+            carousel.innerHTML = '';
+            data.images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `${characterId} project`;
+                carousel.appendChild(img);
+            });
+            
+            totalSlides = data.images.length;
+            currentSlide = 0;
+            updateCarousel();
+            
+            characterModal.classList.add('active');
+        }
+        
+        function closeCharacterModal() {
+            characterModal.classList.remove('active');
+        }
+        
+        function updateCarousel() {
+            const translateX = -currentSlide * 100;
+            carousel.style.transform = `translateX(${translateX}%)`;
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        // Event listeners for character modal
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('character-btn')) {
+                const characterCard = e.target.closest('.character-card');
+                const characterId = characterCard.getAttribute('data-character');
+                openCharacterModal(characterId);
+            }
+            
+            if (e.target.classList.contains('modal-close') || e.target === characterModal) {
+                closeCharacterModal();
+            }
+        });
+        
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        
+        // Keyboard navigation for modal
+        document.addEventListener('keydown', (e) => {
+            if (characterModal.classList.contains('active')) {
+                if (e.key === 'Escape') closeCharacterModal();
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            }
+        });
+    </script>
+</body>
+</html>
