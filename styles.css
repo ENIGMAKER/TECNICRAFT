@@ -1,4 +1,4 @@
-/* Ultra-optimized CSS with aggressive consolidation and performance improvements */
+/* Ultra-compressed CSS with fixed carousel functionality */
 * {
   margin: 0;
   padding: 0;
@@ -23,10 +23,8 @@ body {
   color: var(--accent);
   min-height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
 }
 
-/* Consolidated header and navigation with shared animations */
 .header {
   position: fixed;
   top: 0;
@@ -64,7 +62,6 @@ body {
   gap: 2rem;
 }
 
-/* Unified button and navigation styles with shared hover effects */
 .nav-item,
 .home-nav-btn,
 .subsection-btn,
@@ -107,7 +104,6 @@ body {
   color: var(--black);
 }
 
-/* Optimized main section with consolidated animations */
 .main {
   min-height: 100vh;
   display: flex;
@@ -171,7 +167,6 @@ body {
   transform: translateX(100px);
 }
 
-/* Consolidated button styles */
 .home-navigation {
   display: flex;
   gap: 1rem;
@@ -204,7 +199,6 @@ body {
   color: var(--black);
 }
 
-/* Optimized content sections with shared structure */
 .content-section {
   display: none;
   min-height: 100vh;
@@ -258,19 +252,26 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-/* Unified card styles for all card types */
 .card,
-.character-card {
+.character-card,
+.construction-card,
+.gallery-card,
+.drawing-card,
+.wallpaper-card {
   background: var(--card-bg);
   border: var(--border);
   border-radius: 12px;
-  padding: 2rem;
   transition: var(--transition);
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 .card::before,
-.character-card::before {
+.character-card::before,
+.construction-card::before,
+.gallery-card::before,
+.drawing-card::before,
+.wallpaper-card::before {
   content: "";
   position: absolute;
   top: 0;
@@ -282,34 +283,41 @@ body {
   transition: transform .3s ease;
 }
 .card:hover::before,
-.character-card:hover::before {
+.character-card:hover::before,
+.construction-card:hover::before,
+.gallery-card:hover::before,
+.drawing-card:hover::before,
+.wallpaper-card:hover::before {
   transform: scaleX(1);
 }
 .card:hover,
-.character-card:hover {
+.character-card:hover,
+.construction-card:hover,
+.gallery-card:hover,
+.drawing-card:hover,
+.wallpaper-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow);
 }
-.card h3,
-.character-card h3 {
+
+.character-card {
+  text-align: center;
+  padding: 2rem;
+}
+.character-card h3,
+.card h3 {
   color: var(--primary);
   font-size: 1.5rem;
   margin-bottom: 1rem;
   font-weight: 600;
 }
-.card p,
-.character-card p {
+.character-card p,
+.card p {
   color: var(--accent);
   font-weight: 300;
   margin-bottom: 1.5rem;
 }
 
-.character-card {
-  text-align: center;
-}
-.character-card h3 {
-  font-size: 1.3rem;
-}
 .character-avatar,
 .modal-avatar {
   width: 64px;
@@ -322,20 +330,98 @@ body {
   border: 2px solid var(--primary);
 }
 
-.character-btn {
+.character-btn,
+.construction-btn {
   background: var(--primary);
   color: var(--black);
   padding: .8rem 1.5rem;
   border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
 }
-.character-btn:hover {
+.character-btn:hover,
+.construction-btn:hover {
   background: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(3, 129, 132, 0.3);
 }
 
-/* Optimized modal and carousel */
-.character-modal {
+.construction-card,
+.gallery-card,
+.drawing-card,
+.wallpaper-card {
+  display: flex;
+  flex-direction: column;
+}
+.construction-image,
+.gallery-image,
+.drawing-image,
+.wallpaper-image {
+  position: relative;
+  overflow: hidden;
+}
+.construction-image img,
+.gallery-image,
+.drawing-image,
+.wallpaper-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.construction-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: var(--transition);
+}
+.construction-card:hover .construction-overlay {
+  opacity: 1;
+}
+.construction-content,
+.gallery-content,
+.drawing-content,
+.wallpaper-content {
+  padding: 2rem;
+  flex-grow: 1;
+}
+.construction-content h3,
+.gallery-content h3,
+.drawing-content h3,
+.wallpaper-content h3 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+.construction-content p {
+  color: var(--accent);
+  font-weight: 300;
+}
+.gallery-content,
+.drawing-content,
+.wallpaper-content {
+  text-align: center;
+  padding: 1.5rem;
+}
+.gallery-content h3,
+.drawing-content h3,
+.wallpaper-content h3 {
+  font-size: 1.3rem;
+}
+
+.character-modal,
+.construction-modal,
+.image-modal,
+.wallpaper-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -346,14 +432,19 @@ body {
   z-index: 2000;
   backdrop-filter: blur(10px);
 }
-.character-modal.active {
+.character-modal.active,
+.construction-modal.active,
+.image-modal.active,
+.wallpaper-modal.active {
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeIn .3s ease;
 }
 
-.modal-content {
+.modal-content,
+.image-modal-content,
+.wallpaper-modal-content {
   background: var(--card-bg);
   border: var(--border);
   border-radius: 16px;
@@ -363,6 +454,12 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
+}
+.image-modal-content,
+.wallpaper-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .modal-close {
   position: absolute;
@@ -385,29 +482,49 @@ body {
   gap: 1rem;
   margin-bottom: 2rem;
 }
-.modal-header h2 {
+.modal-header h2,
+.image-modal-title,
+.wallpaper-modal-title {
   color: var(--primary);
   font-size: 2rem;
   font-weight: 700;
 }
+.image-modal-title,
+.wallpaper-modal-title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
 
-.carousel-container {
+/* Fixed carousel functionality */
+.carousel-container,
+.wallpaper-carousel-container {
   position: relative;
   margin-bottom: 2rem;
   border-radius: 12px;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.3);
 }
-.carousel {
+.carousel,
+.wallpaper-carousel {
   display: flex;
   transition: transform .3s ease;
   height: 300px;
 }
-.carousel img {
+.carousel img,
+.wallpaper-carousel img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   flex-shrink: 0;
+}
+.wallpaper-carousel-container {
+  max-width: 80vw;
+  max-height: 60vh;
+}
+.wallpaper-carousel img {
+  max-width: 80vw;
+  max-height: 60vh;
+  object-fit: contain;
 }
 
 .carousel-btn {
@@ -423,6 +540,7 @@ body {
   font-size: 1.5rem;
   cursor: pointer;
   transition: var(--transition);
+  z-index: 10;
 }
 .carousel-btn:hover {
   background: var(--primary);
@@ -435,7 +553,15 @@ body {
   right: 1rem;
 }
 
-.character-info {
+.image-modal-img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.character-info,
+.construction-info {
   display: grid;
   gap: 1.5rem;
 }
@@ -450,16 +576,25 @@ body {
   font-weight: 300;
 }
 
-/* Optimized subsection content */
-.subsection-content {
-  display: none;
-  animation: fadeInUp .6s ease;
+.download-btn {
+  background: var(--primary);
+  color: var(--black);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
 }
-.subsection-content.active {
-  display: block;
+.download-btn:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(3, 129, 132, 0.3);
 }
 
-/* Optimized particles with better performance */
 .particles {
   position: fixed;
   top: 0;
@@ -506,7 +641,6 @@ body {
   }
 }
 
-/* Optimized responsive design with consolidated breakpoints */
 @media (max-width: 768px) {
   .nav {
     flex-direction: column;
@@ -537,348 +671,23 @@ body {
   }
 }
 
-/* Added styles for construction cards and modal */
-.construction-card {
-  background: var(--card-bg);
-  border: var(--border);
-  border-radius: 12px;
-  transition: var(--transition);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-.construction-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-.construction-image {
-  position: relative;
-  overflow: hidden;
-}
-.construction-image img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-.construction-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: var(--transition);
-}
-.construction-card:hover .construction-overlay {
-  opacity: 1;
-}
-.construction-btn {
-  background: var(--primary);
-  color: var(--black);
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-}
-.construction-btn:hover {
-  background: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(3, 129, 132, 0.3);
-}
-.construction-content {
-  padding: 2rem;
-  flex-grow: 1;
-}
-.construction-content h3 {
-  color: var(--primary);
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-.construction-content p {
-  color: var(--accent);
-  font-weight: 300;
-}
-
-.construction-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 2000;
-  backdrop-filter: blur(10px);
-}
-.construction-modal.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn .3s ease;
-}
-.construction-modal .modal-content {
-  background: var(--card-bg);
-  border: var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-.construction-modal .modal-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  justify-content: center;
-}
-.construction-modal .modal-header h2 {
-  color: var(--primary);
-  font-size: 2rem;
-  font-weight: 700;
-}
-.construction-info {
-  display: grid;
-  gap: 1.5rem;
-}
-.construction-info .info-section h3 {
-  color: var(--primary);
-  font-size: 1.2rem;
-  margin-bottom: .5rem;
-  font-weight: 600;
-}
-.construction-info .info-section p {
-  color: var(--accent);
-  font-weight: 300;
-}
-
-/* Gallery and Drawing Cards */
-.gallery-card,
-.drawing-card {
-  background: var(--card-bg);
-  border: var(--border);
-  border-radius: 12px;
-  transition: var(--transition);
-  overflow: hidden;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-}
-.gallery-card:hover,
-.drawing-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-.gallery-image,
-.drawing-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-.gallery-content,
-.drawing-content {
-  padding: 1.5rem;
-  text-align: center;
-}
-.gallery-content h3,
-.drawing-content h3 {
-  color: var(--primary);
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-/* Wallpaper Cards */
-.wallpaper-card {
-  background: var(--card-bg);
-  border: var(--border);
-  border-radius: 12px;
-  transition: var(--transition);
-  overflow: hidden;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-}
-.wallpaper-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
-}
-.wallpaper-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-.wallpaper-content {
-  padding: 1.5rem;
-  text-align: center;
-}
-.wallpaper-content h3 {
-  color: var(--primary);
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-/* Image Modal for Gallery and Drawings */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 2000;
-  backdrop-filter: blur(10px);
-}
-.image-modal.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn .3s ease;
-}
-.image-modal-content {
-  background: var(--card-bg);
-  border: var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  max-width: 90vw;
-  max-height: 90vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.image-modal-title {
-  color: var(--primary);
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-.image-modal-img {
-  max-width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  border-radius: 8px;
-}
-
-/* Wallpaper Modal */
-.wallpaper-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 2000;
-  backdrop-filter: blur(10px);
-}
-.wallpaper-modal.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn .3s ease;
-}
-.wallpaper-modal-content {
-  background: var(--card-bg);
-  border: var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  max-width: 90vw;
-  max-height: 90vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wallpaper-modal-title {
-  color: var(--primary);
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-.wallpaper-carousel-container {
-  position: relative;
-  margin-bottom: 2rem;
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.3);
-  max-width: 80vw;
-  max-height: 60vh;
-}
-.wallpaper-carousel {
-  display: flex;
-  transition: transform .3s ease;
-}
-.wallpaper-carousel img {
-  max-width: 80vw;
-  max-height: 60vh;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-.download-btn {
-  background: var(--primary);
-  color: var(--black);
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: var(--transition);
-  text-decoration: none;
-  display: inline-block;
-}
-.download-btn:hover {
-  background: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(3, 129, 132, 0.3);
-}
-
 html,
 body {
   overflow: auto !important;
   height: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overscroll-behavior: none;
 }
 ::-webkit-scrollbar {
   display: none;
 }
-html,
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.modal-content,
-.construction-modal .modal-content {
-  overflow: auto !important;
-}
-.modal-content::-webkit-scrollbar,
-.construction-modal .modal-content::-webkit-scrollbar {
-  display: none;
-}
 .modal-content {
+  overflow: auto !important;
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-html,
-body {
-  overscroll-behavior: none;
-}
-.modal-content,
-.construction-modal .modal-content {
   overscroll-behavior: contain;
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
 }
